@@ -7,7 +7,8 @@
 void LeoGeo_analyze_disk( imginfo *i, uint8_t sysarea[232], uint8_t diskid[232] )
 {
     // system area
-    i->disk_type = sysarea[5];
+    i->disk_type = sysarea[5]&0x0f;
+    i->retail = (sysarea[5]&0x10)?1:0;
     i->ipl_load_size = be16toh(*((uint16_t*)(sysarea+6)));
     i->ipl_load_address = be32toh(*((uint32_t*)(sysarea+0x1c)));
     i->rom_end_lba = be16toh(*((uint16_t*)(sysarea+0xe0)));

@@ -6,6 +6,7 @@
 typedef struct imginfo {
     // from system area
     unsigned int disk_type;
+    int retail;
     uint32_t ipl_load_address;
     unsigned int ipl_load_size;
     unsigned int rom_end_lba;

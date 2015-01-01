@@ -6,6 +6,7 @@
 
 #include "leogeo.h"
 #include "mfs.h"
+#include "sha1.h"
 
 void die( char* msg )
 {
@@ -36,7 +37,7 @@ int main( int argc, char *argv[] )
     LeoGeo_analyze_disk(&i, sysarea, diskid);
     
     printf( "SYSTEM AREA\n" );
-    printf( "  Disk type     : %d (%s)\n", i.disk_type&0xf, (i.disk_type&0x10?"retail":"dev") );
+    printf( "  Disk type     : %d (%s)\n", i.disk_type, (i.retail?"retail":"dev") );
     printf( "  IPL load address : %08x\n", i.ipl_load_address );
     printf( "  IPL load size : %d\n", i.ipl_load_size );
     printf( "  ROM end lba   : %d\n", i.rom_end_lba );
@@ -52,6 +53,30 @@ int main( int argc, char *argv[] )
     printf( "  company code  : %s\n", i.company_code );
     printf( "  free area     : %02x%02x%02x%02x%02x%02x\n", i.free_area[0], i.free_area[1], i.free_area[2], i.free_area[3], i.free_area[4], i.free_area[5] ); 
     
+    // load ROM area into ram
+    int rom_start_offset = (19720*24) + LeoGeo_lba_to_offset( i.disk_type, 0 );
+    int rom_end_offset =   (19720*24) + LeoGeo_lba_to_offset( i.disk_type, i.rom_end_lba+1 ) - 1;
+    int rom_size = rom_end_offset - rom_start_offset + 1;
+    uint8_t *rom_area = calloc(1, rom_size);
+    if( rom_area == NULL )
+      die( "couldn't allocate memory for whole rom area" );
+    fseek(f, rom_start_offset, SEEK_SET);
+    if(!fread(rom_area, rom_size, 1, f))
+      die( "couldn't read whole rom area" );
+    
+    // calculate sha1 of rom area
+    SHA1_CTX context;
+    unsigned char digest[SHA1_DIGEST_SIZE];
+    SHA1_Init(&context);
+    SHA1_Update( &context, rom_area, rom_size );
+    SHA1_Final( &context, digest );
+    printf( "SHA1 of ROM area: " );
+    int t;
+    for( t=0; t<SHA1_DIGEST_SIZE; t++ )
+      printf( "%02X", digest[t] );
+    printf( "\n" );
+    
+    free(rom_area);
     fclose(f);
     return 0;
 }
