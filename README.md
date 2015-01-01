@@ -27,8 +27,6 @@ SHA1 of ROM area: 811A6197BA132333D0F3FF8516F5258EF0B3CE2D
 
 ```
 
-See the original readme in readme-orig.txt.
-
 ## Building
 
 Just run ```make ```.
