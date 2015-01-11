@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-ggdb -Wall -Werror
+CFLAGS=-O0 -ggdb -Wall -Werror
 
 .PHONY: all
 all: leoimginfo
