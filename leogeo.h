@@ -1,3 +1,5 @@
+// 2015 jrra
+
 #ifndef _LEOGEO_H_
 #define _LEOGEO_H_
 
