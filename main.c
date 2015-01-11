@@ -76,15 +76,15 @@ int main( int argc, char *argv[] )
     
     // calculate sha1 of rom area
     int t;
-//     SHA1_CTX sha1context;
-//     unsigned char digest[SHA1_DIGEST_SIZE];
-//     SHA1_Init(&sha1context);
-//     SHA1_Update( &sha1context, rom_area, rom_size );
-//     SHA1_Final( &sha1context, digest );
-//     printf( "SHA1 of ROM area: " );
-//     for( t=0; t<SHA1_DIGEST_SIZE; t++ )
-//       printf( "%02X", digest[t] );
-//     printf( "\n" );
+    SHA1_CTX sha1context;
+    unsigned char digest[SHA1_DIGEST_SIZE];
+    SHA1_Init(&sha1context);
+    SHA1_Update( &sha1context, rom_area, rom_size );
+    SHA1_Final( &sha1context, digest );
+    printf( "SHA1 of ROM area: " );
+    for( t=0; t<SHA1_DIGEST_SIZE; t++ )
+      printf( "%02X", digest[t] );
+    printf( "\n" );
     
     // check ram MFS
     MFS_CTX mfs_context;
@@ -108,6 +108,7 @@ int main( int argc, char *argv[] )
         printf( "  destination   : %s\n", (mfs_context.destination_code=='1')?"US":"Japan" );
         printf( "  checksum      : %04X\n", mfs_context.checksum );
         printf( "  max files     : %d\n", mfs_context.maxfiles );
+        printf( "\n" );
         
         // dump directories
         for( t=0; t<mfs_context.maxfiles; t++ )
@@ -131,9 +132,9 @@ int main( int argc, char *argv[] )
               ut.modtime = MFS_date2timet( mfs_context.directory + 48*t );
               ut.actime = ut.modtime;
               utime( extractpath, &ut );
-              printf("%s\n", extractpath );
-              MFS_dir_fullprint( &mfs_context, &dir );
-              printf("\n");
+              printf( "     dir:\t%s\n", extractpath );
+//               MFS_dir_fullprint( &mfs_context, &dir );
+//               printf("\n");
             }
         }
         
@@ -162,7 +163,7 @@ int main( int argc, char *argv[] )
                   snprintf( filename, 200, ".%s", path );
               }
               FILE *outfile = fopen( filename, "w" );
-              printf( "%04x, %04x, %04x, %8d:\t%s\n", file.attr, file.fat_entry_num, file.dir_id, file.filesize, filename );
+              printf( "%8d:\t%s\n", file.filesize, filename );
               uint16_t blocknum = file.fat_entry_num;
               int bytes_left = file.filesize;
               uint16_t nextblocknum = blocknum;
