@@ -1,4 +1,5 @@
 /* Yay0 decompression */
+/* original code (c) spinout I think */
 
 #include <n64tool.h>
 
