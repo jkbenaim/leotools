@@ -18,8 +18,11 @@ mfs.o: Makefile mfs.h mfs.c
 sha1.o: Makefile sha1.h sha1.c
 	$(CC) $(CFLAGS) -c sha1.c
 	
+yay1.o: Makefile yay1.c yay1.h
+	$(CC) $(CFLAGS) -c yay1.c
+	
 leoimginfo: Makefile leogeo.o mfs.o sha1.o main.c
 	$(CC) $(CFLAGS) main.c mfs.o leogeo.o sha1.o -o leoimginfo
 
-ma2d1view: Makefile ma2d1view.c yay0.c
-	$(CC) $(CFLAGS) `sdl-config --libs --cflags` ma2d1view.c -o ma2d1view
+ma2d1view: Makefile yay1.o ma2d1view.c
+	$(CC) $(CFLAGS) `sdl-config --libs --cflags` yay1.o ma2d1view.c -o ma2d1view
