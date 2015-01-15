@@ -58,6 +58,10 @@ int main( int argc, char *argv[] )
         // uncompressed, ezpz
         imgData = ma2d1 + 0x490;
     }
+    else
+    {
+        die( "unknown image format - not NCMP or RGBA" );
+    }
     
     
     // Init SDL.
