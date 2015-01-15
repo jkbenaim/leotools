@@ -44,7 +44,7 @@ int yay1_decode(uint8_t *s, uint8_t *d)
             unsigned int count = codeword >> 12;
             unsigned int offset = codeword & 0xfff;
             
-            uint8_t *t1 = d - offset;
+            uint8_t *backReference = d - offset;
             if( count == 0 )
                 count = *(chunks++) + 0x12;
             else
@@ -52,7 +52,7 @@ int yay1_decode(uint8_t *s, uint8_t *d)
             
             do {
                 count--;
-                *(d++) = *(t1++ - 1);
+                *(d++) = *(backReference++ - 1);
             } while( count != 0 );
         } else {
             *(d++) = *(chunks++);
