@@ -129,13 +129,13 @@ void die( char *msg )
 
 uint32_t rgb565_to_rgb888( uint16_t in )
 {
-    //rrrrrggg gggbbbbb
+    //rrrrrggg ggbbbbba
     int r = ((in>>11)&0x1f)<<3;
-    int g = ((in>>5 )&0x3f)<<2;
-    int b = ((in    )&0x1f)<<3;
+    int g = ((in>>6 )&0x1f)<<3;
+    int b = ((in>>1 )&0x1f)<<3;
     
     r += (r>>5);
-    g += (g>>6);
+    g += (g>>5);
     b += (b>>5);
     return (r<<16) + (g<<8) + b;
 }
