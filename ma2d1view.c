@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <SDL/SDL.h>
 
+#include "endian.h"
 #include "yay1.h"
 
 void die( char *msg );

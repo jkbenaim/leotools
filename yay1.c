@@ -1,8 +1,8 @@
 // 2015 jrra
 
 #include <inttypes.h>
-#include <endian.h>
 #include <strings.h>
+#include "endian.h"
 #include "yay1.h"
 
 uint32_t yay1_get_size(uint8_t *s)

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <iconv.h>
 #include <errno.h>
+#include "endian.h"
 #include "leogeo.h"
 #include "mfs.h"
 

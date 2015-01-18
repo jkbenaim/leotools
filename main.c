@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <endian.h>
 #include <inttypes.h>
 
 #include <sys/stat.h>
@@ -14,6 +13,7 @@
 // #include <time.h>
 #include <utime.h>
 
+#include "endian.h"
 #include "leogeo.h"
 #include "mfs.h"
 #include "sha1.h"
