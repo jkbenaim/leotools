@@ -18,10 +18,9 @@
 #include "mfs.h"
 #include "sha1.h"
 
-void die( char* msg )
+void die( char *msg )
 {
-    fprintf(stderr, msg);
-    fprintf(stderr, "\n");
+    fprintf( stderr, "%s\n", msg );
     exit(1);
 }
 
