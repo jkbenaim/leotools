@@ -9,7 +9,7 @@
 
 void die( char *msg );
 int input_event_filter( const SDL_Event *event );
-uint32_t rgb565_to_rgb888( uint16_t in );
+uint32_t rgb5551_to_argb8888( uint16_t in );
 
 int stop = 0;
 
@@ -79,9 +79,12 @@ int main( int argc, char *argv[] )
     for( y=0; y<height; ++y ) for( x=0; x<width; ++x )
     {
         int coord = (2*(y*width+x));
-        uint16_t pixel565 = be16toh( *(uint16_t*)(imgData+coord) );
-        uint32_t pixel888 = rgb565_to_rgb888( pixel565 );
-        imgPixels[x + y*width] = pixel888;
+        uint16_t pixel5551 = be16toh( *(uint16_t*)(imgData+coord) );
+        uint32_t pixel8888 = rgb5551_to_argb8888( pixel5551 );
+        if( pixel8888 & 0xFF000000 )
+            imgPixels[x + y*width] = pixel8888;
+        else
+            imgPixels[x+y*width] = ((x/16+y/16)&1)?0x00FFFFFF:0x00DDDDDD;
     }
     SDL_SoftStretch( imgSurface, NULL, screen, NULL );
     SDL_UpdateRect( screen, 0, 0, 0, 0 );
@@ -122,20 +125,27 @@ int main( int argc, char *argv[] )
 
 void die( char *msg )
 {
-    fprintf(stderr, msg);
-    fprintf(stderr, "\n");
+    fprintf( stderr, "%s\n", msg );
     exit(1);
 }
 
-uint32_t rgb565_to_rgb888( uint16_t in )
+uint32_t rgb5551_to_argb8888( uint16_t in )
 {
     //rrrrrggg ggbbbbba
     int r = ((in>>11)&0x1f)<<3;
     int g = ((in>>6 )&0x1f)<<3;
     int b = ((in>>1 )&0x1f)<<3;
+    int a = in & 0x1;
     
     r += (r>>5);
     g += (g>>5);
     b += (b>>5);
-    return (r<<16) + (g<<8) + b;
+    if( a == 0 )
+        a = 0;
+    else
+        a = 0xff;
+    
+    uint32_t argb = (a<<24) + (r<<16) + (g<<8) + b;
+//     printf( "%04X %x %x %x %08X\n", in, r, g, b, argb );
+    return argb;
 }
