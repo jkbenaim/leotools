@@ -1,7 +1,7 @@
 // 2015 jrra
 
 #include <stdio.h>      // for snprintf
-#include <endian.h>
+#include "endian.h"
 #include "leogeo.h"
 
 void LeoGeo_analyze_disk( imginfo *i, uint8_t sysarea[232], uint8_t diskid[232] )
