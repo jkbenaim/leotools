@@ -85,6 +85,21 @@ Press Q to quit.
 
 ![Screenshot of mathumbview](screenshots/mathumbview.png)
 
+## <a name="psppmview"></a>psppmview
+View the thumbnail for various Mario Artist files. This is the icon for the file that would be shown in the file browser.
+
+Note that the thumbnails are only 24x24 pixels, so the window is quite small.
+### Example run
+```console
+> psppmview samples/psppm.PSPPM
+Dimensions: 216x204, frames: 14, size: 1233792 bytes
+Use the left and right arrow keys to switch frames,
+or press Q to quit.
+
+```
+
+![Screenshot of psppmview](screenshots/psppmview.png)
+
 ## Building
 
 Just run ```make ```.
