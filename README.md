@@ -75,6 +75,8 @@ Press Q to quit.
 
 ## <a name="mathumbview"></a>mathumbview
 View the thumbnail for various Mario Artist files. This is the icon for the file that would be shown in the file browser.
+
+Note that the thumbnails are only 24x24 pixels, so the window is quite small.
 ### Example run
 ```console
 > mathumbview samples/ma2d1-compressed.MA2D1
