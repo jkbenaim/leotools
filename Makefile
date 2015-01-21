@@ -9,7 +9,7 @@ endif
 all: leoimginfo ma2d1view mathumbview psppmview
 
 clean:
-	rm -f *.o leoimginfo ma2d1view
+	rm -f *.o leoimginfo ma2d1view mathumbview psppmview
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
