@@ -61,6 +61,9 @@ int main( int argc, char *argv[] )
     uint8_t *imgData = psppm + 0x490 + currentFrame*(216*202*2);
     redraw( screen, imgSurface, imgData, width, height );
     
+    // Instructions
+    printf( "Use the left and right arrow keys to switch frames,\nor press Q to quit.\n" );
+    
     // Wait for the escape key, q key, or close button to be pressed.
     SDL_Event event;
     while( !stop )

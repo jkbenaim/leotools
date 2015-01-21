@@ -90,6 +90,9 @@ int main( int argc, char *argv[] )
     SDL_SoftStretch( imgSurface, NULL, screen, NULL );
     SDL_UpdateRect( screen, 0, 0, 0, 0 );
     
+    // Instructions
+    printf( "Press Q to quit.\n" );
+    
     // Wait for the escape key, q key, or close button to be pressed.
     SDL_Event event;
     while( !stop )
