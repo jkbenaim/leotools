@@ -85,6 +85,19 @@ Press Q to quit.
 
 ![Screenshot of mathumbview](screenshots/mathumbview.png)
 
+## <a name="psppmview"></a>psppmview
+View PSPPM files. These are animations. Use the left and right arrow keys to switch frames.
+### Example run
+```console
+> psppmview samples/psppm.PSPPM
+Dimensions: 216x204, frames: 14, size: 1233792 bytes
+Use the left and right arrow keys to switch frames,
+or press Q to quit.
+
+```
+
+![Screenshot of psppmview](screenshots/psppmview.png)
+
 ## Building
 
 Just run ```make ```.
