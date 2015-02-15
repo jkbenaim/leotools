@@ -2,5 +2,6 @@ leoimginfo
 ma2d1view
 mathumbview
 psppmview
+mfsextract
 *.o
 *.bin

@@ -6,10 +6,10 @@ ifeq ($(OS),Darwin)
 endif
 
 .PHONY: all clean
-all: leoimginfo ma2d1view mathumbview psppmview
+all: leoimginfo ma2d1view mathumbview psppmview mfsextract
 
 clean:
-	rm -f *.o leoimginfo ma2d1view mathumbview psppmview
+	rm -f *.o leoimginfo ma2d1view mathumbview psppmview mfsextract
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -22,8 +22,10 @@ mathumbview.o: mathumbview.c
 
 psppmview.o: psppmview.c
 	$(CC) $(CFLAGS) `sdl-config --cflags` -c $^ -o $@
+	
+mfsextract: mfsextract.o mfs.o leogeo.o
 
-leoimginfo: leogeo.o mfs.o sha1.o main.o
+leoimginfo: leogeo.o mfs.o sha1.o leoimginfo.o
 	$(CC) $(ICONVFLAG) $^ -o $@
 
 ma2d1view: yay1.o ma2d1view.o
