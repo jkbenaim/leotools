@@ -3,7 +3,8 @@
 
 Work with 64DD disk images and the files contained therein.
 
-- [leoimginfo](#leoimginfo): Show information about a 64DD disk image, and extract MFS contents (if they exist).
+- [leoimginfo](#leoimginfo): Show information about a 64DD disk image.
+- [mfsextract](#mfsextract): List and extract files stored in the RAM partition of a 64DD disk image, if it has an MFS filesystem.
 - [ma2d1view](#ma2d1view): View MA2D1 files. These are pictures saved by games in the Mario Artist series.
 - [mathumbview](#mathumbview): View the thumbnail for various Mario Artist files. This is the icon for the file that would be shown in the file browser.
 - [psppmview](#psppmview): View PSPPM files. These are animations.
@@ -28,7 +29,7 @@ DISK ID
   disk use      : 0
   timestamp     : 2000-02-07 15:39:06
   company code  : 01
-  free area     : 4e4d412d4558
+  free area     : 4e4d412d4558 (NMA-EX)
 SHA1 of ROM area: 22B8E9D3F4E95255AC0FDDCEF4C1BDC073DCE660
 MFS (RAM)
   ram start off : 1942a40
@@ -41,7 +42,13 @@ MFS (RAM)
   destination   : Japan
   checksum      : BB50B310
   max files     : 899
+```
 
+## <a name="mfsextract"></a>mfsextract
+List and extract files stored in the RAM partition of a 64DD disk image, if it has an MFS filesystem.
+### Example run
+```console
+> mfsextract NUD-DMTJ-JPN.bin 
      dir:       .
      dir:       ./jrra♪
      dir:       ./★▲●
@@ -53,8 +60,10 @@ MFS (RAM)
      dir:       ./マル福撮影所
      dir:       ./ＧＢテレビ
      dir:       ./★  みる？
- 1569864:       ./★  みる？/社長からのごあいさつ .TSBGL
+ 1569864:       ./★  みる？/社長からのごあいさつ.TSBGL
   226832:       ./★▲●/豪  マサル.TSTLT
+  209536:       ./★▲●/Ｅ〜坊sssss.TSTLT
+  209536:       ./にんてんプロ/Ｅ〜坊ょょょょょょょ.TSTLT
    38309:       ./★▲●/ムービーの写真.MA2D1
    51116:       ./jrra♪/記念写真　02人.MA2D1
   217040:       ./jrra♪/Obama.TSTLT
