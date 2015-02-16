@@ -23,23 +23,23 @@
 void LeoGeo_analyze_disk( imginfo *i, uint8_t sysarea[232], uint8_t diskid[232] )
 {
     // system area
-    i->disk_type = sysarea[5]&0x0f;
-    i->retail = (sysarea[5]&0x10)?1:0;
-    i->ipl_load_size = be16toh(*((uint16_t*)(sysarea+6)));
+    i->disk_type        = sysarea[5]&0x0f;
+    i->retail           = (sysarea[5]&0x10)?1:0;
+    i->ipl_load_size    = be16toh(*((uint16_t*)(sysarea+0x06)));
     i->ipl_load_address = be32toh(*((uint32_t*)(sysarea+0x1c)));
-    i->rom_end_lba = be16toh(*((uint16_t*)(sysarea+0xe0)));
-    i->ram_start_lba = be16toh(*((uint16_t*)(sysarea+0xe2)));
-    i->ram_end_lba = be16toh(*((uint16_t*)(sysarea+0xe4)));
+    i->rom_end_lba      = be16toh(*((uint16_t*)(sysarea+0xe0)));
+    i->ram_start_lba    = be16toh(*((uint16_t*)(sysarea+0xe2)));
+    i->ram_end_lba      = be16toh(*((uint16_t*)(sysarea+0xe4)));
     
     // disk id
     int num;
     for(num=0; num<4; num++)
         i->initial_code[num] = diskid[num];
     i->initial_code[4] = '\0';
-    i->game_version = diskid[4];
-    i->disk_number = diskid[5];
-    i->ram_use = diskid[6];
-    i->disk_use = diskid[7];
+    i->game_version    = diskid[4];
+    i->disk_number     = diskid[5];
+    i->ram_use         = diskid[6];
+    i->disk_use        = diskid[7];
     i->company_code[0] = diskid[0x18];
     i->company_code[1] = diskid[0x19];
     i->company_code[2] = '\0';
