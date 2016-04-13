@@ -10,7 +10,7 @@ Work with 64DD disk images and the files contained therein.
 - [psppmview](#psppmview): View PSPPM files. These are animations.
 
 ## <a name="leoimginfo"></a>leoimginfo
-Show information about a 64DD disk image, and extract MFS contents (if they exist).
+Show information about a 64DD disk image.
 ### Example run
 ```console
 > leoimginfo NUD-DMTJ-JPN.bin 
