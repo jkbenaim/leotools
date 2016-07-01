@@ -1,21 +1,21 @@
 CC=gcc
-CFLAGS=-O0 -ggdb -Wall -Werror
+CFLAGS=-O0 -ggdb -Wall -std=gnu99
 OS=$(shell uname -s)
 ifeq ($(OS),Darwin)
 	ICONVFLAG=-liconv
 endif
 
 .PHONY: all clean
-all: leoimginfo ma2d1view mathumbview psppmview mfsextract
+all: leoimginfo ma2d1view mathumbview psppmview mfsextract ma3d1view
 
 clean:
-	rm -f *.o leoimginfo ma2d1view mathumbview psppmview mfsextract
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	rm -f *.o leoimginfo ma2d1view mathumbview psppmview mfsextract ma3d1view
 
 ma2d1view.o: ma2d1view.c
 	$(CC) $(CFLAGS) `sdl-config --cflags` -c $^ -o $@
+	
+ma3d1view: ma3d1view.o
+	$(CC) -lX11 -lGL -lGLU $^ -o $@
 
 mathumbview.o: mathumbview.c
 	$(CC) $(CFLAGS) `sdl-config --cflags` -c $^ -o $@

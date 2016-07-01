@@ -1,11 +1,12 @@
 #leotools
-2015 jkbenaim
+2015-2016 jkbenaim
 
 Work with 64DD disk images and the files contained therein.
 
 - [leoimginfo](#leoimginfo): Show information about a 64DD disk image.
 - [mfsextract](#mfsextract): List and extract files stored in the RAM partition of a 64DD disk image, if it has an MFS filesystem.
 - [ma2d1view](#ma2d1view): View MA2D1 files. These are pictures saved by games in the Mario Artist series.
+- [ma3d1view](#ma3d1view): View MA3D1 files. These are 3D models saved by Polygon Studio.
 - [mathumbview](#mathumbview): View the thumbnail for various Mario Artist files. This is the icon for the file that would be shown in the file browser.
 - [psppmview](#psppmview): View PSPPM files. These are animations.
 
@@ -81,6 +82,16 @@ Press Q to quit.
 ```
 
 ![Screenshot of ma2d1view](screenshots/ma2d1view.png)
+
+## <a name="ma3d1view"></a>ma3d1view
+View MA3D1 files. These are 3D models saved by Polygon Studio.
+### Example run
+```console
+> ma3d1view samples/3d/Mario.MA3D1 
+Press w for wireframe, or q to quit.
+```
+
+![Screenshot of ma3d1view](screenshots/ma3d1view.png)
 
 ## <a name="mathumbview"></a>mathumbview
 View the thumbnail for various Mario Artist files. This is the icon for the file that would be shown in the file browser.

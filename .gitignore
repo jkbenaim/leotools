@@ -3,5 +3,6 @@ ma2d1view
 mathumbview
 psppmview
 mfsextract
+ma3d1view
 *.o
 *.bin
