@@ -14,8 +14,8 @@ clean:
 ma2d1view.o: ma2d1view.c
 	$(CC) $(CFLAGS) `sdl-config --cflags` -c $^ -o $@
 	
-ma3d1view: ma3d1view.o
-	$(CC) -lX11 -lGL -lGLU $^ -o $@
+ma3d1view: ma3d1view.c
+	$(CC) $(CFLAGS) $^ -o $@ -lX11 -lGL -lGLU
 
 mathumbview.o: mathumbview.c
 	$(CC) $(CFLAGS) `sdl-config --cflags` -c $^ -o $@
