@@ -25,6 +25,7 @@
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glu.h>
+#include <GL/glut.h>
 
 #include <sys/time.h>
 #include <sys/stat.h>
@@ -130,57 +131,12 @@ void timersub( struct timeval *a, struct timeval *b, struct timeval *res ) {
 }
 #endif
 
-void CreateWindow() {
-    dpy = XOpenDisplay( NULL );
-    
-    if( dpy == NULL ) {
-        fprintf( stderr, "\n\tcannot connect to X server\n\n" );
-        exit(1);
-    }
-    
-    root = DefaultRootWindow( dpy );
-    
-    vi = glXChooseVisual( dpy, 0, att );
-    if( vi == NULL ) {
-        fprintf( stderr, "\n\tno appropriate visual found\n\n" );
-        exit(1);
-    }
-    else {
-//         printf( "\n\tvisual %p selected\n", (void *)vi->visualid );
-    }
-    
-    cmap = XCreateColormap( dpy, root, vi->visual, AllocNone );
-    // https://stackoverflow.com/questions/3645632/how-to-create-a-window-with-a-bit-depth-of-32
-    
-    swa.colormap = cmap;
-    swa.event_mask = ExposureMask | KeyPressMask | PointerMotionMask | StructureNotifyMask | ButtonMotionMask;
-    swa.background_pixel = 0;
-    swa.border_pixel = 0;
-    
-    win = XCreateWindow( dpy, root, 0, 0, winWidth, winHeight, 0, vi->depth, InputOutput,
-                         vi->visual, CWColormap | CWEventMask | CWBackPixel | CWBorderPixel, &swa );
-    
-    XMapWindow( dpy, win );
-    XStoreName( dpy, win, "ma3d1view" );
-    
-    glc = glXCreateContext( dpy, vi, NULL, GL_TRUE );
-    glXMakeCurrent( dpy, win, glc );
-    
-    
-    
-    // resume gl init
+void InitGraphics() {
     glEnable( GL_DEPTH_TEST );
     
     // set up projection matrix
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-//     glMatrixMode( GL_PROJECTION );
-//     glLoadIdentity();
-//     gluPerspective( 30.0,                       // fov
-//                     (float)winWidth/winHeight,  // aspect ratio
-//                     0.1,                        // nearclip
-//                     100.0                       // farclip
-//     );
     
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
@@ -193,14 +149,12 @@ void CreateWindow() {
     glLightfv( GL_LIGHT0, GL_POSITION, light_position );
     glEnable( GL_LIGHTING );
     glEnable( GL_LIGHT0 );
-//     glEnable( GL_DEPTH_TEST );
     
     // scale normal vectors to magnitude 1
     glEnable( GL_NORMALIZE );
 }
 
 void DrawModels() {
-    
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     glMatrixMode( GL_MODELVIEW );
@@ -223,6 +177,7 @@ void DrawModels() {
             glCallList( modelDLs[i] );
     
     glPopMatrix();
+    glutSwapBuffers();
 }
 
 void LoadFile( char *filename ) {
@@ -351,6 +306,35 @@ void BuildDisplaylists() {
     }
 }
 
+void Reshape( GLint width, GLint height ) {
+    winWidth  = width;
+    winHeight = height;
+    glViewport( 0, 0, winWidth, winHeight );
+    
+    float aspect = (float)winWidth/(float)winHeight;
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    gluPerspective( 45.0,   // fov
+                    aspect, // aspect ratio
+                    0.1,    // nearclip
+                    100.0   // farclip
+    );
+}
+
+void Keyboard( unsigned char key, int x, int y ) {
+    switch( key ) {
+        case 'q':
+        case 27:    // esc key
+            exit(0);
+            break;
+        case 'w':
+            wireframe = wireframe?0:1;
+            break;
+        default:
+            break;
+    }
+}
+
 int main( int argc, char *argv[] ) {
     if( argc < 2 )
         die( "need a file" );
@@ -358,71 +342,18 @@ int main( int argc, char *argv[] ) {
     printf( "Press w for wireframe, or q to quit.\n" );
     
     LoadFile( argv[1] );
-    CreateWindow();
+    glutInit( &argc, argv );
+    glutInitWindowSize( winWidth, winHeight );
+    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
+    glutCreateWindow( "ma3d1view" );
+    
+    glutDisplayFunc( InitGraphics );
+    glutReshapeFunc( Reshape );
+    glutKeyboardFunc( Keyboard );
+    glutIdleFunc( DrawModels );
+    
     BuildDisplaylists();
     
-    // Big X event loop.
-    while(1) {
-        if( XCheckWindowEvent( dpy, win, ~0, &xev ) )
-            switch( xev.type ) {
-                case Expose:
-                    XGetWindowAttributes( dpy, win, &gwa );
-                    glMatrixMode( GL_PROJECTION );
-                    glViewport( 0, 0, gwa.width, gwa.height );
-                    break;
-                case KeyPress:
-                    switch( XKeycodeToKeysym( dpy, xev.xkey.keycode, 1) ) {
-                        case XK_Q:        // q key
-                            glXMakeCurrent( dpy, None, NULL );
-                            glXDestroyContext( dpy, glc );
-                            XDestroyWindow( dpy, win );
-                            XCloseDisplay( dpy );
-                            exit(0);
-                            break;
-                        case XK_W:        // w key
-                            wireframe = wireframe?0:1;
-                            break;
-                        default:
-                            printf( "keycode was %d\n", xev.xkey.keycode );
-                            break;
-                    }
-                    
-                    break;
-                case MotionNotify:
-//                     XQueryPointer( dpy, win, &root, &winChild, &rootx, &rooty, &winx, &winy, &mask_return );
-                    break;
-                case ConfigureNotify:
-                {
-//                     printf( "configure\n" );
-                    float aspect = (float)xev.xconfigure.width/xev.xconfigure.height;
-                    glMatrixMode( GL_PROJECTION );
-                    glLoadIdentity();
-                    gluPerspective( 45.0,                       // fov
-                                    aspect,                     // aspect ratio
-                                    0.1,                        // nearclip
-                                    100.0                       // farclip
-                    );
-                }
-                    break;
-                default:
-//                     printf( "unknown event\n" );
-                    break;
-            }
-            
-        glXSwapBuffers( dpy, win );
-        DrawModels();
-        glFinish();
-        tvPrev.tv_sec = tvCur.tv_sec;
-        tvPrev.tv_usec = tvCur.tv_usec;
-        gettimeofday( &tvCur, NULL );
-        timersub( &tvCur, &tvPrev, &tvDiff );
-        frametime += tvDiff.tv_usec;
-//         if( ++frame == 180 ) {
-//             printf( "frametime: %.3f ms\n", frametime/180000.0 );
-//             frame = frametime = 0;
-//         }
-        
-    }
-    
+    glutMainLoop();
     return 0;
 }
