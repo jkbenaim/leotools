@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <SDL/SDL.h>
+#include "endian.h"
 
 void die( char *msg );
 int input_event_filter( const SDL_Event *event );
